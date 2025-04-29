@@ -1,0 +1,21 @@
+[package]
+name = "attos_pixoo64"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+api = { workspace = true }
+scheduler = { workspace = true }
+
+chrono = { workspace = true, features = ["serde"] }
+config = { workspace = true }
+env_logger = { workspace = true }
+futures = { workspace = true }
+gif = { workspace = true }
+log = { workspace = true }
+md5 = { workspace = true }
+once_cell = { workspace = true }
+reqwest = { workspace = true, features = ["json"] }
+serde = { workspace = true, features = ["derive"] }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "rt", "macros"] }
