@@ -13,10 +13,14 @@ config = { workspace = true }
 env_logger = { workspace = true }
 futures = { workspace = true }
 gif = { workspace = true }
+itertools = { workspace = true }
 log = { workspace = true }
 md5 = { workspace = true }
 once_cell = { workspace = true }
 reqwest = { workspace = true, features = ["json"] }
 serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+serde_repr = { workspace = true }
+serde_with = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["rt-multi-thread", "rt", "macros"] }

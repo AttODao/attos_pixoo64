@@ -9,7 +9,10 @@ pub struct Config {
   pub gif_path: String,
   pub hoyolab_ltoken: String,
   pub hoyolab_ltuid: String,
-  pub news_api_key: String,
+  pub genshin_id: String,
+  pub starrail_id: String,
+  pub zzz_id: String,
+  pub news_api_key: String, // 046d261ab4e64921b28eb8411233360b
   pub hoyolab_reflesh_time: NaiveTime,
   pub news_reflesh_time: NaiveTime,
 }

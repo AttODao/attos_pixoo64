@@ -13,14 +13,15 @@ pub struct SendAnimation<'a> {
   pub pic_offset: u8,
   pub pic_id: u32,
   pub pic_speed: u16,
+  #[serde(serialize_with = "pic_data_serializer")]
   pub pic_data: Cow<'a, [u8]>,
 }
 
-pub fn command_serializer<S: Serializer>(_: &(), serializer: S) -> Result<S::Ok, S::Error> {
+fn command_serializer<S: Serializer>(_: &(), serializer: S) -> Result<S::Ok, S::Error> {
   serializer.serialize_str("Draw/SendHttpGif")
 }
 
-pub fn pic_data_serializer<S: Serializer>(
+fn pic_data_serializer<S: Serializer>(
   pic_data: &Cow<[u8]>,
   serializer: S,
 ) -> Result<S::Ok, S::Error> {
