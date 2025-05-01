@@ -1,22 +1,28 @@
 use itertools::Itertools;
+use reqwest::Client;
 
-use crate::{errors::AppError, models::news_response::NewsResponse};
+use crate::{config::CONFIG, consts::*, errors::AppError, models::news_response::NewsResponse};
 
 pub async fn get_news() -> Result<String, AppError> {
-  let url = format!(
-    "https://newsapi.org/v2/top-headlines?country=us&apiKey={}",
-    crate::config::CONFIG.news_api_key
-  );
-  let response = reqwest::get(&url).await?;
-  let json = response
-    .json::<NewsResponse>()
-    .await
-    .map_err(|_| AppError::ParseJsonError)?;
+  let client = Client::builder().user_agent(USER_AGENT).build()?;
+  let response = client
+    .get(NEWS_API_URL)
+    .query(&[
+      ("country", "us"),
+      ("pageSize", "5"),
+      ("apiKey", &CONFIG.news_api_key),
+    ])
+    .send()
+    .await?;
+  let json = response.json::<NewsResponse>().await.map_err(|e| {
+    println!("error: {}", e);
+    AppError::ParseJsonError
+  })?;
   match json {
     NewsResponse::Ok {
       total_results: _,
       articles,
-    } => Ok(articles.into_iter().map(|a| a.title).join("\t")),
+    } => Ok(articles.into_iter().map(|a| a.title).join("    ")),
     NewsResponse::Error {
       code: _,
       message: _,

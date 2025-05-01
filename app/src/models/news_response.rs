@@ -1,32 +1,31 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "PascalCase", tag = "status")]
+#[serde(tag = "status")]
 pub enum NewsResponse {
+  #[serde(rename_all = "camelCase", rename = "ok")]
   Ok {
     total_results: u32,
     articles: Vec<NewsArticle>,
   },
-  Error {
-    code: String,
-    message: String,
-  },
+  #[serde(rename_all = "camelCase", rename = "error")]
+  Error { code: String, message: String },
 }
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct NewsArticle {
   pub source: NewsSource,
-  pub author: String,
+  pub author: Option<String>,
   pub title: String,
-  pub description: String,
+  pub description: Option<String>,
   pub url: String,
-  pub url_to_image: String,
+  pub url_to_image: Option<String>,
   pub published_at: String,
-  pub content: String,
+  pub content: Option<String>,
 }
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "camelCase")]
 pub struct NewsSource {
-  pub id: String,
+  pub id: Option<String>,
   pub name: String,
 }
