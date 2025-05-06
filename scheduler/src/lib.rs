@@ -1,12 +1,13 @@
-use std::{sync::Arc, time::Duration};
+use std::sync::Arc;
 
 use async_trait::async_trait;
+use chrono::TimeDelta;
 use futures::FutureExt;
 use tokio_util::sync::CancellationToken;
 
 #[async_trait]
 pub trait Scheduled {
-  async fn process(&self, interval: Duration);
+  async fn process(&self, interval: TimeDelta);
 }
 
 pub struct Scheduler {
@@ -25,7 +26,7 @@ impl Scheduler {
     }
   }
 
-  pub fn run(&self, interval: Duration) {
+  pub fn run(&self, interval: TimeDelta) {
     let scheduleds = self.scheduleds.clone();
     let cancel_token = self.cancel_token.clone();
     tokio::spawn(async move {
@@ -37,7 +38,7 @@ impl Scheduler {
         }
 
         futures::select! {
-          _ = tokio::time::sleep(interval).fuse() =>(),
+          _ = tokio::time::sleep(interval.to_std().expect("interval is larger than the maximum value supported for std::time::Duration")).fuse() =>(),
           _ = cancel_token.cancelled().fuse() => return,
         };
       }

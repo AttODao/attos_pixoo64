@@ -22,7 +22,7 @@ pub struct SendDisplayListItem {
   pub text_height: u8,
   #[serde(rename = "TextString")]
   pub text_string: String,
-  pub speed: Option<u32>,
+  pub speed: u32,
   pub color: String,
   pub update_time: Option<u32>,
   pub align: Align,

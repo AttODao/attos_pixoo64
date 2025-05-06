@@ -10,6 +10,8 @@ pub enum AppError {
   GifFormatError,
   #[error("http request error({0})")]
   HttpRequestError(#[from] reqwest::Error),
+  #[error("hoyo api error({0})")]
+  HoyoApiError(#[from] hoyo_api::errors::NetworkError),
   #[error("parse json error")]
   ParseJsonError,
 }

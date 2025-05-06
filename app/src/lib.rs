@@ -1,14 +1,14 @@
+pub mod api;
 pub mod models;
+pub mod services;
 
 pub mod config;
 pub mod consts;
 pub mod errors;
-pub mod news_api;
-pub mod pixoo_api;
 
 #[cfg(test)]
 mod tests {
-  use crate::{models::news_response::NewsResponse, news_api::get_news};
+  use crate::{api::news_api::get_news, models::news_response::NewsResponse};
 
   #[test]
   fn pixoo_api_test() {}

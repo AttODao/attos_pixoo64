@@ -1,4 +1,4 @@
-use chrono::naive::NaiveTime;
+use chrono::{naive::NaiveTime, TimeDelta};
 use config::ConfigError;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
@@ -13,8 +13,9 @@ pub struct Config {
   pub starrail_id: String,
   pub zzz_id: String,
   pub news_api_key: String, // 046d261ab4e64921b28eb8411233360b
-  pub hoyolab_reflesh_time: NaiveTime,
-  pub news_reflesh_time: NaiveTime,
+  pub animation_reflesh_times: Vec<NaiveTime>,
+  pub hoyolab_reflesh_interval: TimeDelta,
+  pub news_reflesh_times: Vec<NaiveTime>,
 }
 impl Config {
   pub fn load() -> Result<Self, ConfigError> {

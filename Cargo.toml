@@ -1,14 +1,14 @@
 [workspace]
 resolver = "2"
 members = [
-  "./api",
-  "./scheduler",
   "./app",
+  "./hoyo_api",
+  "./scheduler",
 ]
 
 [workspace.dependencies]
-api = { path = "api" }
 app = { path = "app" }
+hoyo_api = { path = "hoyo_api" }
 scheduler = { path = "scheduler" }
 
 async-trait = "0.1"

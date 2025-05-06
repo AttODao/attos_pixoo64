@@ -4,7 +4,15 @@ use gif::Decoder;
 use reqwest::Client;
 use tokio::task::JoinSet;
 
-use crate::{config::CONFIG, consts::*, errors::AppError, models::send_animation::SendAnimation};
+use crate::{
+  config::CONFIG,
+  consts::*,
+  errors::AppError,
+  models::{
+    send_animation::SendAnimation,
+    send_display_list::{Align, DisplayType, ScrollDir, SendDisplayList, SendDisplayListItem},
+  },
+};
 
 pub async fn send_animation<R: Read>(
   decoder: Decoder<R>,
@@ -51,6 +59,51 @@ pub async fn send_animation<R: Read>(
   Ok(())
 }
 
-pub async fn send_text(x: u8, y: u8, w: u8, h: u8, text_id: u8) -> Result<(), AppError> {
+pub async fn send_text(
+  text: String,
+  x: u8,
+  y: u8,
+  w: u8,
+  h: u8,
+  font: u16,
+  color: String,
+  text_id: u8,
+) -> Result<(), AppError> {
+  let client = Client::builder().user_agent(USER_AGENT).build()?;
+  let data = SendDisplayList {
+    command: (),
+    item_list: vec![SendDisplayListItem {
+      text_id,
+      r#type: DisplayType::TextMessage,
+      x,
+      y,
+      dir: ScrollDir::Left,
+      font,
+      text_width: w,
+      text_height: h,
+      text_string: text,
+      speed: SCROLL_SPEED,
+      color,
+      update_time: None,
+      align: Align::Left,
+    }],
+  };
+  let res = client
+    .post(format!("http://{}", CONFIG.pixoo_ip))
+    .json(&data)
+    .send()
+    .await;
+  match res {
+    Ok(res) => {
+      let json = res
+        .json::<HashMap<String, u32>>()
+        .await
+        .map_err(|_| AppError::ParseJsonError)?;
+      if json.get("error_code") != Some(&0) {
+        return Err(AppError::ApiError);
+      }
+    }
+    Err(e) => return Err(AppError::HttpRequestError(e)),
+  }
   Ok(())
 }
