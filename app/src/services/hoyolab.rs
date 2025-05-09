@@ -11,18 +11,18 @@ use scheduler::Scheduled;
 
 use crate::{api::pixoo_api::send_text, config::CONFIG, consts::*, errors::AppError};
 
-pub struct News<T: Fn(AppError) + Send + Sync> {
+pub struct Hoyolab<T: Fn(AppError) + Send + Sync> {
   on_error: T,
 }
 
-impl<T: Fn(AppError) + Send + Sync> News<T> {
+impl<T: Fn(AppError) + Send + Sync> Hoyolab<T> {
   pub fn new(on_error: T) -> Self {
-    News { on_error }
+    Hoyolab { on_error }
   }
 }
 
 #[async_trait]
-impl<T: Fn(AppError) + Send + Sync> Scheduled for News<T> {
+impl<T: Fn(AppError) + Send + Sync> Scheduled for Hoyolab<T> {
   async fn process(&self, interval: TimeDelta) {
     let now = Local::now().naive_local().time();
     let time_to_midnight = TimeDelta::days(1) - (now - NaiveTime::from_hms_opt(0, 0, 0).unwrap());

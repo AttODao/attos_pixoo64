@@ -3,8 +3,6 @@ pub const HOYOLAB_LANG: &str = "ja-jp";
 pub const NEWS_API_URL: &str = "https://newsapi.org/v2/top-headlines";
 pub const USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
 
-pub const ANIMATION_ID: u8 = 1;
-
 pub const HOUR_ID: u8 = 0;
 pub const MINUTE_ID: u8 = 1;
 pub const MONTH_ID: u8 = 2;

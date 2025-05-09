@@ -14,14 +14,16 @@ use crate::{
   },
 };
 
-pub async fn send_animation<R: Read>(
-  decoder: Decoder<R>,
-  animation_id: u32,
-) -> Result<(), AppError> {
+pub async fn send_animation<R: Read>(decoder: Decoder<R>) -> Result<(), AppError> {
   if decoder.width() != 64 || decoder.height() != 64 || decoder.buffer_size() != 64 * 64 * 3 {
     return Err(AppError::GifFormatError);
   }
   let client = Client::builder().user_agent(USER_AGENT).build()?;
+  client
+    .post(format!("http://{}", CONFIG.pixoo_ip))
+    .json(&[("COmmand", "Draw/ResetHttpGifId")])
+    .send()
+    .await?;
   let mut join_set = JoinSet::new();
   let frames = decoder.into_iter().collect::<Result<Vec<_>, _>>()?;
   let frame_num = frames.len();
@@ -31,7 +33,7 @@ pub async fn send_animation<R: Read>(
       pic_num: frame_num as u8,
       pic_width: 64,
       pic_offset: i as u8,
-      pic_id: animation_id,
+      pic_id: 1,
       pic_speed: frame.delay as u16,
       pic_data: frame.buffer,
     };

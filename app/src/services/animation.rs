@@ -1,8 +1,10 @@
+use std::fs::File;
+
 use async_trait::async_trait;
 use chrono::*;
 use scheduler::Scheduled;
 
-use crate::{config::CONFIG, errors::AppError};
+use crate::{api::pixoo_api::send_animation, config::CONFIG, errors::AppError};
 
 pub struct Animation<T: Fn(AppError) + Send + Sync> {
   on_error: T,
@@ -10,7 +12,6 @@ pub struct Animation<T: Fn(AppError) + Send + Sync> {
 
 impl<T: Fn(AppError) + Send + Sync> Animation<T> {
   pub fn new(on_error: T) -> Self {
-    let decoder = gif::Decoder::new(std::fs::File::open(CONFIG.gif_path.clone()).unwrap()).unwrap();
     Animation { on_error }
   }
 }
@@ -26,7 +27,15 @@ impl<T: Fn(AppError) + Send + Sync> Scheduled for Animation<T> {
         } else {
           TimeDelta::zero()
         };
-      if to < interval {}
+      if to < interval {
+        tokio::time::sleep(to.to_std().unwrap()).await;
+        if let Err(e) =
+          send_animation(gif::Decoder::new(File::open(CONFIG.gif_path.clone()).unwrap()).unwrap())
+            .await
+        {
+          (self.on_error)(e);
+        }
+      }
     }
   }
 }

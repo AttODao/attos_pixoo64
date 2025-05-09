@@ -1,14 +1,26 @@
-use attos_pixoo64::services::clock::Clock;
+use attos_pixoo64::{
+  errors::AppError,
+  services::{animation::Animation, clock::Clock, hoyolab::Hoyolab, news::News},
+};
 use chrono::TimeDelta;
-use log::{info, warn};
+use log::{error, info, warn};
 use scheduler::Scheduler;
+
+fn on_error(e: AppError) {
+  error!("Error: {}", e);
+}
 
 #[tokio::main]
 async fn main() {
   env_logger::init_from_env(env_logger::Env::new().default_filter_or("warn"));
   info!("Starting AttO's Pixoo64...");
 
-  let scheduler = Scheduler::from_scheduleds(vec![Box::new(Clock::new(|e| {}))]);
+  let scheduler = Scheduler::from_scheduleds(vec![
+    Box::new(Animation::new(on_error)),
+    Box::new(Clock::new(on_error)),
+    Box::new(Hoyolab::new(on_error)),
+    Box::new(News::new(on_error)),
+  ]);
   info!("Starting scheduler...");
   scheduler.run(TimeDelta::minutes(1));
 
