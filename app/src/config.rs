@@ -1,4 +1,4 @@
-use chrono::{naive::NaiveTime, TimeDelta};
+use chrono::naive::NaiveTime;
 use config::ConfigError;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
@@ -12,10 +12,12 @@ pub struct Config {
   pub genshin_id: String,
   pub starrail_id: String,
   pub zzz_id: String,
-  pub news_api_key: String, // 046d261ab4e64921b28eb8411233360b
+  pub open_weather_api_key: String,
+  pub weather_lat: String,
+  pub weather_lon: String,
   pub animation_reflesh_times: Vec<NaiveTime>,
-  pub hoyolab_reflesh_interval: TimeDelta,
-  pub news_reflesh_times: Vec<NaiveTime>,
+  pub hoyolab_reflesh_interval_mins: u32,
+  pub weather_reflesh_times: Vec<NaiveTime>,
 }
 impl Config {
   pub fn load() -> Result<Self, ConfigError> {

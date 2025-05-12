@@ -100,30 +100,30 @@ pub async fn get_daily_note<T: DailyNote>(
   login_cookie: LoginCookie,
   lang: String,
 ) -> Result<JsonWrapper<T>, NetworkError> {
-  println!(
-    "{}",
-    fetch_game_record_endpoint(
-      T::game(),
-      "note",
-      Method::GET,
-      login_cookie.clone(),
-      lang.clone(),
-      &[
-        (
-          "server".to_string(),
-          recognize_server(T::game(), &uid)
-            .ok_or(NetworkError::InvalidUidError)?
-            .to_string(),
-        ),
-        ("role_id".to_string(), uid.clone())
-      ]
-      .into_iter()
-      .collect::<HashMap<_, _>>(),
-    )
-    .await?
-    .text()
-    .await?
-  );
+  // println!(
+  //   "{}",
+  //   fetch_game_record_endpoint(
+  //     T::game(),
+  //     "note",
+  //     Method::GET,
+  //     login_cookie.clone(),
+  //     lang.clone(),
+  //     &[
+  //       (
+  //         "server".to_string(),
+  //         recognize_server(T::game(), &uid)
+  //           .ok_or(NetworkError::InvalidUidError)?
+  //           .to_string(),
+  //       ),
+  //       ("role_id".to_string(), uid.clone())
+  //     ]
+  //     .into_iter()
+  //     .collect::<HashMap<_, _>>(),
+  //   )
+  //   .await?
+  //   .text()
+  //   .await?
+  // );
   let game = T::game();
   let response = fetch_game_record_endpoint(
     game,

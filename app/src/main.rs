@@ -1,6 +1,7 @@
 use attos_pixoo64::{
+  api::pixoo_api::{clear_text, send_text},
   errors::AppError,
-  services::{animation::Animation, clock::Clock, hoyolab::Hoyolab, news::News},
+  services::{animation::Animation, text::Text},
 };
 use chrono::TimeDelta;
 use log::{error, info, warn};
@@ -17,10 +18,28 @@ async fn main() {
 
   let scheduler = Scheduler::from_scheduleds(vec![
     Box::new(Animation::new(on_error)),
-    Box::new(Clock::new(on_error)),
-    Box::new(Hoyolab::new(on_error)),
-    Box::new(News::new(on_error)),
+    Box::new(Text::new(on_error)),
   ]);
+  info!("Init task...");
+  (async || {
+    Animation::run().await?;
+    clear_text().await?;
+    send_text(
+      [
+        Text::clock(chrono::Local::now().naive_local()).await?,
+        Text::hoyolab().await?,
+        Text::weather().await?,
+      ]
+      .into_iter()
+      .flatten()
+      .collect(),
+    )
+    .await?;
+    Ok(())
+  })()
+  .await
+  .map_err(|e| on_error(e))
+  .unwrap();
   info!("Starting scheduler...");
   scheduler.run(TimeDelta::minutes(1));
 
@@ -52,5 +71,6 @@ async fn main() {
         v = s2.recv() => v.unwrap(),
     );
   }
+  clear_text().await.unwrap_or_else(|e| on_error(e));
   warn!("Recieved control C and shutting down.");
 }

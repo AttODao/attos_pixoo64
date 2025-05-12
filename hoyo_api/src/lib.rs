@@ -10,16 +10,11 @@ pub mod utils;
 #[cfg(test)]
 mod tests {
   use crate::{
-    daily::{claim_daily, get_daily_info},
-    game_record::{get_daily_note, get_user_stats},
+    daily::claim_daily,
+    game_record::get_daily_note,
     models::{
-      genshin::game_record::GenshinDailyNote,
       login_cookie::LoginCookie,
-      starrail::game_record::StarrailDailyNote,
-      zzz::{
-        daily::{ZzzClaimDaily, ZzzDailyInfo},
-        game_record::{ZzzDailyNote, ZzzUserStats},
-      },
+      zzz::{daily::ZzzClaimDaily, game_record::ZzzDailyNote},
     },
   };
 

@@ -4,6 +4,8 @@ use thiserror::Error;
 pub enum AppError {
   #[error("api error")]
   ApiError,
+  #[error("file open error")]
+  FileOpenError(#[from] std::io::Error),
   #[error("gif decoding error({0})")]
   GifDecodingError(#[from] gif::DecodingError),
   #[error("gif format error")]

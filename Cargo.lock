@@ -130,6 +130,7 @@ dependencies = [
  "log",
  "md5",
  "once_cell",
+ "phf",
  "reqwest",
  "scheduler",
  "serde",

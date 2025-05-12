@@ -85,7 +85,7 @@ pub struct ZzzDailyNote {
   #[serde_as(as = "crate::models::deserializers::to_card_sign::ToCardSign")]
   pub card_sign: bool,
   pub bounty_commission: ZzzBountyCommission,
-  pub survey_points: ZzzSurveyPoints,
+  pub survey_points: Option<ZzzSurveyPoints>,
   #[serde_as(as = "crate::models::deserializers::zzz_to_duration::ZzzToDuration")]
   pub abyss_refresh: Duration,
 }

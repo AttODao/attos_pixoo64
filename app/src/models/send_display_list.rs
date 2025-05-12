@@ -1,4 +1,5 @@
 use serde::{Serialize, Serializer};
+use serde_repr::Serialize_repr;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -24,10 +25,11 @@ pub struct SendDisplayListItem {
   pub text_string: String,
   pub speed: u32,
   pub color: String,
+  #[serde(skip_serializing_if = "Option::is_none")]
   pub update_time: Option<u32>,
   pub align: Align,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize_repr)]
 #[repr(u8)]
 pub enum DisplayType {
   Second = 1,
@@ -54,13 +56,13 @@ pub enum DisplayType {
   TextMessage = 22,
   NetTextMessage = 23,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize_repr)]
 #[repr(u8)]
 pub enum ScrollDir {
   Left = 0,
   Right = 1,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize_repr)]
 #[repr(u8)]
 pub enum Align {
   Left = 1,
