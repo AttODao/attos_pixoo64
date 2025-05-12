@@ -2,3 +2,5 @@
 
 /config.yaml
 /app/config.yaml
+
+/docker-compose.yml
